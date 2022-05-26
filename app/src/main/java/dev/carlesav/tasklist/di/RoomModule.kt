@@ -22,5 +22,5 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun provideQuoteDao(db: TasksDatabase) = db.getTasksDao()
+    fun provideTasksDao(db: TasksDatabase) = db.getTasksDao()
 }
