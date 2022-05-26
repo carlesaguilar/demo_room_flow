@@ -3,12 +3,14 @@ package dev.carlesav.tasklist.presentation
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.carlesav.tasklist.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: TasksListAdapter
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,19 +18,30 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpRecycler()
         initUI()
+    }
+
+    private fun setUpRecycler() {
+        adapter = TasksListAdapter()
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun initUI() {
         viewModel.init()
 
         binding.addTaskBtn.setOnClickListener {
-            viewModel.onEvent(TasksListEvents.OnAddTask(binding.taskTxt.toString()))
-            binding.taskTxt.setText("")
+            val taskToAdd = binding.taskTxt.text.toString()
+            if (taskToAdd.isNotEmpty()) {
+                viewModel.onEvent(TasksListEvents.OnAddTask(taskToAdd))
+                binding.taskTxt.setText("")
+            }
         }
 
         viewModel.getTasksList().observe(this) { tasksList ->
-            // todo show tasks in recyclerview
+            adapter.addItems(newItems = tasksList)
         }
     }
 }
