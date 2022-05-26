@@ -20,10 +20,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        viewModel.getTasks()
+        viewModel.init()
+
         binding.addTaskBtn.setOnClickListener {
             viewModel.onEvent(TasksListEvents.OnAddTask(binding.taskTxt.toString()))
             binding.taskTxt.setText("")
+        }
+
+        viewModel.getTasksList().observe(this) { tasksList ->
+            // todo show tasks in recyclerview
         }
     }
 }

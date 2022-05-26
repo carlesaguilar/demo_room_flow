@@ -19,11 +19,17 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val tasksList = MutableLiveData<List<Task>>()
 
-    fun getTasks() {
+    fun init() {
+        getTasks()
+    }
+
+    private fun getTasks() {
         getTasksUseCase().onEach { tasks ->
             tasksList.value = tasks
         }.launchIn(viewModelScope)
     }
+
+    fun getTasksList() = tasksList
 
     private fun insertTask(text: String) {
         viewModelScope.launch {
