@@ -16,9 +16,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initUI()
+    }
 
+    private fun initUI() {
         viewModel.getTasks()
-
-        binding.addTaskBtn.setOnClickListener { viewModel.insertTask("foo") }
+        binding.addTaskBtn.setOnClickListener {
+            viewModel.onEvent(TasksListEvents.OnAddTask(binding.taskTxt.toString()))
+            binding.taskTxt.setText("")
+        }
     }
 }

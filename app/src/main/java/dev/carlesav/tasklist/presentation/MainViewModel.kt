@@ -23,9 +23,17 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun insertTask(text: String) {
+    private fun insertTask(text: String) {
         viewModelScope.launch {
             insertTaskUseCase.invoke(text)
+        }
+    }
+
+    fun onEvent(event: TasksListEvents) {
+        when (event) {
+            is TasksListEvents.OnAddTask -> {
+                insertTask(event.text)
+            }
         }
     }
 }
