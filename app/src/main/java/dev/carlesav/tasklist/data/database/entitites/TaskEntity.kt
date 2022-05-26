@@ -12,4 +12,4 @@ data class TaskEntity(
     @ColumnInfo(name = "text") val text: String,
 )
 
-fun Task.toTaskEntity() = TaskEntity(text = text)
+fun Task.toTaskEntity() = TaskEntity(id = id, text = text)

@@ -23,7 +23,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecycler() {
-        adapter = TasksListAdapter()
+        adapter = TasksListAdapter { task ->
+            viewModel.onEvent(TasksListEvents.OnDeleteTask(task))
+        }
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

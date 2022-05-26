@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.carlesav.tasklist.databinding.ItemTaskBinding
 import dev.carlesav.tasklist.domain.model.Task
 
-class TasksListAdapter() :
+class TasksListAdapter(private val deleteListener: (Task) -> Unit) :
     RecyclerView.Adapter<TasksListAdapter.HeroViewHolder>() {
 
     private var items = mutableListOf<Task>()
@@ -27,7 +27,7 @@ class TasksListAdapter() :
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
-        holder.bind(item = items[position])
+        holder.bind(item = items[position], deleteListener = deleteListener)
     }
 
     fun addItems(newItems: List<Task>) {
@@ -37,8 +37,9 @@ class TasksListAdapter() :
 
     class HeroViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Task) {
+        fun bind(item: Task, deleteListener: (Task) -> Unit) {
             binding.taskText.text = item.text
+            binding.taskDelete.setOnClickListener { deleteListener(item) }
         }
     }
 }

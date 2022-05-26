@@ -1,9 +1,6 @@
 package dev.carlesav.tasklist.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import dev.carlesav.tasklist.data.database.entitites.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +11,7 @@ interface TasksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: TaskEntity)
+
+    @Delete
+    suspend fun deleteTask(task: TaskEntity)
 }

@@ -2,6 +2,6 @@ package dev.carlesav.tasklist.domain.model
 
 import dev.carlesav.tasklist.data.database.entitites.TaskEntity
 
-data class Task(val text: String)
+data class Task(val id: Int, val text: String)
 
-fun TaskEntity.toTask() = Task(text = text)
+fun TaskEntity.toTask() = Task(id = id, text = text)

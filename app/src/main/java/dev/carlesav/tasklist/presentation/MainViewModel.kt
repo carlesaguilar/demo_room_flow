@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.carlesav.tasklist.domain.model.Task
+import dev.carlesav.tasklist.domain.use_case.DeleteTaskUseCase
 import dev.carlesav.tasklist.domain.use_case.GetTasksUseCase
 import dev.carlesav.tasklist.domain.use_case.InsertTaskUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val insertTaskUseCase: InsertTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : ViewModel() {
     private val tasksList = MutableLiveData<List<Task>>()
 
@@ -37,10 +39,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            deleteTaskUseCase.invoke(task)
+        }
+    }
+
     fun onEvent(event: TasksListEvents) {
         when (event) {
             is TasksListEvents.OnAddTask -> {
                 insertTask(event.text)
+            }
+            is TasksListEvents.OnDeleteTask -> {
+                deleteTask(event.task)
             }
         }
     }
