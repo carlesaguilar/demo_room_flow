@@ -1,9 +1,10 @@
 package dev.carlesav.tasklist.presentation
 
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.carlesav.tasklist.domain.model.Task
 import dev.carlesav.tasklist.domain.use_case.GetTasksUseCase
 import dev.carlesav.tasklist.domain.use_case.InsertTaskUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -16,10 +17,11 @@ class MainViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val insertTaskUseCase: InsertTaskUseCase,
 ) : ViewModel() {
+    private val tasksList = MutableLiveData<List<Task>>()
 
     fun getTasks() {
-        getTasksUseCase().onEach { tasksList ->
-            Log.d("xxx", tasksList.size.toString())
+        getTasksUseCase().onEach { tasks ->
+            tasksList.value = tasks
         }.launchIn(viewModelScope)
     }
 
